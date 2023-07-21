@@ -6,7 +6,6 @@ let questionInstance = {};
 const preload = document.getElementById("preload");
 const nextButton = document.getElementById("next");
 const formWrapper = document.getElementById("wrapper");
-const quizForm = document.getElementById("quiz-form");
 const contentArea = document.getElementById("content-area");
 const timer = document.getElementById("timer");
 const questionTitle = document.getElementById("question-title");
