@@ -71,20 +71,20 @@ function generateOptions(question) {
 
 // Init timer for question
 function initQuestion() {
+
+  // Prevent confusion on question change
+  timer.innerText = "00:30";
+
   // Disable inputs
   const inputElements = document.querySelectorAll("input");
-  // inputElements.forEach((input) => input.setAttribute("disabled", true));
+  inputElements.forEach((input) => {
+    input.setAttribute("disabled", true);
+    input.labels[0].classList.add("opacity-50");
+  });
 
   // Start timer
   questionTimer = setInterval(function () {
-    if (countdown <= 20) {
-      inputElements.forEach((input) => input.removeAttribute("disabled"));
-    }
-
-    // Update timer to inform user
-    timer.innerText = countdown < 10 ? `00:0${countdown}` : `00:${countdown}`;
-
-    // Finish the question when reached 0
+    // Go to the question when reached 0
     if (countdown <= 0) {
       clearInterval(questionTimer);
       resetCountdown();
@@ -92,6 +92,17 @@ function initQuestion() {
     } else {
       countdown--;
     }
+
+    // Enable inputs after 10 seconds
+    if (countdown <= 20) {
+      inputElements.forEach((input) => {
+        input.removeAttribute("disabled");
+        input.labels[0].classList.remove("opacity-50");
+      });
+    }
+
+    // Update timer to inform user
+    timer.innerText = countdown < 10 ? `00:0${countdown}` : `00:${countdown}`;
   }, 1000);
 }
 
@@ -101,6 +112,7 @@ function resetCountdown() {
   countdown = 30;
 }
 
+// Crate table from submitted answers
 function submitAnswers() {
   let rows = "";
   for (let i = 0; i < questions.length; i++) {
@@ -109,10 +121,12 @@ function submitAnswers() {
     rows += `
     <tr class="bg-white border-b">
         <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
-            ${i+1}
+            ${i + 1}
         </th>
         <td class="px-6 py-4">${questions[i].title}</td>
-        <td class="px-6 py-4 ${answer === "" ? "text-red-600" : ""}">${answer !== "" ? answer : "Boş Bırakılmış"}</td>
+        <td class="px-6 py-4 ${answer === "" ? "text-red-600" : ""}">${
+      answer !== "" ? answer : "Boş Bırakılmış"
+    }</td>
     </tr>`;
   }
 
@@ -187,14 +201,14 @@ function initTest() {
 }
 
 // Reset others when one is selected
-function updateInputs(elem){
-  if(elem.checked){
-    checkInputs.forEach(inputElem => {
-      if(inputElem !== elem){
+function updateInputs(elem) {
+  if (elem.checked) {
+    checkInputs.forEach((inputElem) => {
+      if (inputElem !== elem) {
         inputElem.checked = false;
       }
-    })
-  } else{
+    });
+  } else {
     elem.checked = false;
   }
 }
@@ -203,7 +217,7 @@ function updateInputs(elem){
 window.updateInputs = updateInputs;
 
 nextButton.addEventListener("click", () => {
-    nextQuestion();
+  nextQuestion();
 });
 
 document.addEventListener("DOMContentLoaded", () => {
