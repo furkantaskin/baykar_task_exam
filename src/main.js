@@ -4,10 +4,11 @@ const questions = {};
 
 const preload = document.getElementById("preload");
 const nextButton = document.getElementById("next");
-const prevButton = document.getElementById("prev");
 const formWrapper = document.getElementById("wrapper");
 const timer = document.getElementById("timer");
 const questionTitle = document.getElementById("question-title");
+let questionTimer;
+let countdown = 30;
 let currentQuestionIndex = 1;
 
 // Generate array from body and shuffle content of body
@@ -28,121 +29,101 @@ function shuffleOptions(questionData) {
   return optionsArray;
 }
 
-
-// Create input element with radio type
-function createInput() {
-  const optionInput = document.createElement("input");
-  optionInput.setAttribute("type", "radio");
-  optionInput.setAttribute("id", "ornek");
-
-  return optionInput;
+// Fetch question from api
+function fetchQuestion(getIndex = 1) {
+  const url = `https://jsonplaceholder.typicode.com/posts/${getIndex}`;
+  preload.removeAttribute("style");
+  return axios
+    .get(url)
+    .then((response) => {
+      return response.data;
+    })
+    .catch((error) => {
+      console.error("Error fetching data:", error.message);
+      return null;
+    });
 }
 
+// Generate options and label as well as question
 function generateOptions(question) {
   questionTitle.innerText = question.title;
   let options = shuffleOptions(question);
-  let inputCount = formWrapper.childElementCount;
 
-  for (let i = 0; i < options.length; i++) {
-    // If inputs are already created
-    if (inputCount > 0) {
-      // Create input elements with radio type
-      formWrapper.appendChild(createInput());
-    } else {
-      // Update content of inputs
-      formWrapper.querySelectorAll("input").forEach((input, index) => {
-        input.value = index;
-      });
-    }
-  }
-
-  if (inputCount > 0) {
-    for (let i = 0; i < options.length; i++) {
-      const optionInput = document.createElement("input");
-      optionInput.setAttribute("type", "radio");
-      optionInput.setAttribute("id", "ornek");
-      formWrapper.appendChild(optionInput);
-    }
-  } else {
-  }
+  formWrapper.querySelectorAll("input").forEach((input, index) => {
+    input.value = options[index];
+  });
+  formWrapper.querySelectorAll("label").forEach((label, index) => {
+    label.innerText = options[index];
+  });
 }
 
 // Init question
-function initQuestion(question) {
-  let countdown = 30;
-
-  // Generate options from question object
-  generateOptions(question);
+function initQuestion() {
 
   // Disable inputs
   const inputElements = document.querySelectorAll("input");
   inputElements.forEach((input) => input.setAttribute("disabled", true));
 
   // Start timer
-  setInterval(function () {
-    // Enable inputs after 10 seconds
-    if (countdown <= 20) {
+  questionTimer = setInterval(function () {
+    countdown--;
+    if (countdown <= 27) {
       inputElements.forEach((input) => input.removeAttribute("disabled"));
     }
 
     // Update timer to inform user
     timer.innerText = countdown < 10 ? `00:0${countdown}` : `00:${countdown}`;
-    inputElements.forEach((input) => (input.value = countdown));
 
-    // Finish the question if when reached 0
-    if (countdown === 0) {
-      clearInterval();
-    } else {
-      countdown--;
+    // Finish the question when reached 0
+    if (countdown <= 0) {
+      clearInterval(questionTimer);
+      resetCountdown();
+      nextQuestion();
     }
   }, 1000);
 }
 
+function resetCountdown() {
+  clearInterval(questionTimer);
+  countdown = 30;
+}
+
 // Go to next question
 function nextQuestion() {
-  console.log("next");
+  // Deselect input
+  formWrapper.querySelectorAll("input").forEach((elem) => {
+    elem.checked = false;
+  });
+  resetCountdown();
   currentQuestionIndex++;
-}
-
-// Go to previous question
-function prevQuestion() {
-  console.log("prev");
-  currentQuestionIndex--;
-}
-
-// Init the test
-function initTest() {
-  axios
-    .get("https://jsonplaceholder.typicode.com/posts/1")
-    .then((response) => {
-      const data = response.data;
-      console.log(data.body);
-      initQuestion(data);
+  fetchQuestion(currentQuestionIndex)
+    .then((data) => {
+      initQuestion();
+      generateOptions(data);
     })
     .catch((error) => {
-      console.error("Error fetching data:", error);
+      console.error("Error:", error.message);
     })
-    .finally(() => {
-      preload.style.display = "none";
-    });
+    .finally(() => (preload.style.display = "none"));
+}
+// Init the test
+function initTest() {
+  fetchQuestion(currentQuestionIndex)
+    .then((data) => {
+      initQuestion();
+      generateOptions(data);
+    })
+    .catch((error) => {
+      console.error("Error:", error.message);
+    })
+    .finally(() => (preload.style.display = "none"));
 }
 
-nextButton.addEventListener("click", nextQuestion);
-prevButton.addEventListener("click", (e) => {
-  if (currentQuestionIndex === 1) {
-    e.preventDefault();
-  } else {
-    prevQuestion();
-  }
+nextButton.addEventListener("click", () => {
+  nextQuestion();
 });
 
 document.addEventListener("DOMContentLoaded", () => {
-  if (currentQuestionIndex === 1) {
-    prevButton.style.display = "none";
-    prevButton.parentNode.style.justifyContent = "flex-end";
-  } else {
-    prevButton.removeAttribute("style");
-    prevButton.parentNode.removeAttribute("style");
-  }
+  preload.style.display = "none";
   initTest();
 });
