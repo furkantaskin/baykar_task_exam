@@ -9,6 +9,7 @@ const formWrapper = document.getElementById("wrapper");
 const contentArea = document.getElementById("content-area");
 const timer = document.getElementById("timer");
 const questionTitle = document.getElementById("question-title");
+const checkInputs = document.querySelectorAll("input[type='checkbox']");
 let questionTimer;
 let countdown = 30;
 let currentQuestionIndex = 1;
@@ -188,6 +189,22 @@ function initTest() {
     })
     .finally(() => (preload.style.display = "none"));
 }
+
+// Reset others when one is selected
+function updateInputs(elem){
+  if(elem.checked){
+    checkInputs.forEach(inputElem => {
+      if(inputElem !== elem){
+        inputElem.checked = false;
+      }
+    })
+  } else{
+    elem.checked = false;
+  }
+}
+
+// Expose function of module to window
+window.updateInputs = updateInputs;
 
 nextButton.addEventListener("click", () => {
     nextQuestion();
