@@ -139,6 +139,7 @@ function submitAnswers() {
   timer.remove();
   guide.remove();
   indexer.remove();
+  resetCountdown();
   isDone = true;
   contentArea.innerHTML = `
     <table class="w-full text-sm text-center text-gray-500">
@@ -226,6 +227,8 @@ function updateInputs(elem) {
 // Expose function of module to window
 window.updateInputs = updateInputs;
 
+
+// Navigate questions using keyboard
 function keyboardNavigation(e) {
   if (!isDone) {
     nextButton.blur();
