@@ -79,7 +79,7 @@ function initQuestion() {
 
   // Start timer
   questionTimer = setInterval(function () {
-    if (countdown <= 100) {
+    if (countdown <= 20) {
       inputElements.forEach((input) => input.removeAttribute("disabled"));
     }
 
