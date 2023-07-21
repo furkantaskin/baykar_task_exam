@@ -114,7 +114,7 @@ function submitAnswers() {
             ${i+1}
         </th>
         <td class="px-6 py-4">${questions[i].title}</td>
-        <td class="px-6 py-4">${answer !== "" ? answer : "Boş Bırakılmış"}</td>
+        <td class="px-6 py-4 ${answer === "" ? "text-red-600" : ""}">${answer !== "" ? answer : "Boş Bırakılmış"}</td>
     </tr>`;
   }
 
@@ -145,6 +145,7 @@ function nextQuestion() {
       isChecked = true;
       val = elem.id;
       elem.checked = false;
+      elem.blur();
     }
   });
 
