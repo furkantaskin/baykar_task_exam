@@ -159,12 +159,13 @@ function nextQuestion() {
   let isChecked = false;
   let val = "";
   formWrapper.querySelectorAll("input").forEach((elem) => {
-    if (elem.checked) {
+    if (countdown <= 20 && elem.checked) {
       isChecked = true;
       val = elem.id;
-      elem.checked = false;
       elem.blur();
     }
+    elem.checked = false;
+    elem.blur();
   });
 
   // If user selected answer, pass the argument or pass blank
