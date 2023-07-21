@@ -228,6 +228,7 @@ window.updateInputs = updateInputs;
 
 function keyboardNavigation(e) {
   if (!isDone) {
+    nextButton.blur();
     let option = e.key.toLowerCase();
     if ("abcd".includes(option)) {
       const getInput = document.getElementById(option);
