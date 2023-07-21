@@ -3,7 +3,6 @@ import axios from "axios";
 let questions = [];
 let questionInstance = {};
 
-const preload = document.getElementById("preload");
 const nextButton = document.getElementById("next");
 const formWrapper = document.getElementById("wrapper");
 const contentArea = document.getElementById("content-area");
@@ -35,7 +34,6 @@ function shuffleOptions(questionData) {
 // Fetch question from api
 function fetchQuestion(getIndex = 1) {
   const url = `https://jsonplaceholder.typicode.com/posts/${getIndex}`;
-  preload.removeAttribute("style");
   return axios
     .get(url)
     .then((response) => {
@@ -172,8 +170,7 @@ function nextQuestion() {
       })
       .catch((error) => {
         console.error("Error:", error.message);
-      })
-      .finally(() => (preload.style.display = "none"));
+      });
   }
 }
 
@@ -186,8 +183,7 @@ function initTest() {
     })
     .catch((error) => {
       console.error("Error:", error.message);
-    })
-    .finally(() => (preload.style.display = "none"));
+    });
 }
 
 // Reset others when one is selected
