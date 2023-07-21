@@ -91,8 +91,8 @@ function initQuestion() {
     // Go to the question when reached 0
     if (countdown <= 0) {
       clearInterval(questionTimer);
-      resetCountdown();
       nextQuestion();
+      resetCountdown();
     } else {
       countdown--;
     }
@@ -226,7 +226,6 @@ function updateInputs(elem) {
 
 // Expose function of module to window
 window.updateInputs = updateInputs;
-
 
 // Navigate questions using keyboard
 function keyboardNavigation(e) {
