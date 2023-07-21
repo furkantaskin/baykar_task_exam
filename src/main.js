@@ -6,6 +6,7 @@ let questionInstance = {};
 const nextButton = document.getElementById("next");
 const formWrapper = document.getElementById("wrapper");
 const contentArea = document.getElementById("content-area");
+const indexer = document.getElementById("indexer");
 const timer = document.getElementById("timer");
 const questionTitle = document.getElementById("question-title");
 const guide = document.getElementById("guide");
@@ -75,6 +76,7 @@ function generateOptions(question) {
 function initQuestion() {
   // Prevent confusion on question change
   timer.innerText = "00:30";
+  indexer.innerText = currentQuestionIndex;
 
   // Disable inputs
   const inputElements = document.querySelectorAll("input");
@@ -136,6 +138,7 @@ function submitAnswers() {
 
   timer.remove();
   guide.remove();
+  indexer.remove();
   isDone = true;
   contentArea.innerHTML = `
     <table class="w-full text-sm text-center text-gray-500">
