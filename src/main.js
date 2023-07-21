@@ -86,7 +86,7 @@ function initQuestion(question) {
     }
 
     // Update timer to inform user
-    timer.innerText = `00:${countdown}`;
+    timer.innerText = countdown < 10 ? `00:0${countdown}` : `00:${countdown}`;
     inputElements.forEach((input) => (input.value = countdown));
 
     // Finish the question if when reached 0
