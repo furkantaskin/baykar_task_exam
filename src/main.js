@@ -81,6 +81,7 @@ function initQuestion() {
   inputElements.forEach((input) => {
     input.setAttribute("disabled", true);
     input.labels[0].classList.add("opacity-50", "cursor-not-allowed");
+    input.labels[0].classList.remove("cursor-pointer");
   });
 
   // Start timer
