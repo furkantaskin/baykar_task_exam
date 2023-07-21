@@ -71,7 +71,6 @@ function generateOptions(question) {
 
 // Init timer for question
 function initQuestion() {
-
   // Prevent confusion on question change
   timer.innerText = "00:30";
 
@@ -224,4 +223,16 @@ nextButton.addEventListener("click", () => {
 
 document.addEventListener("DOMContentLoaded", () => {
   initTest();
+});
+
+// Navigate options using keyboard
+window.addEventListener("keydown", function (e) {
+  let option = e.key.toLowerCase();
+  if ("abcd".includes(option)) {
+    const getInput = document.getElementById(option);
+    if (!getInput.disabled) {
+      getInput.checked = getInput.checked ? false : true;
+      updateInputs(getInput);
+    }
+  }
 });
