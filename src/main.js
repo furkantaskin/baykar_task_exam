@@ -154,8 +154,6 @@ function nextQuestion() {
   questions.push(questionInstance);
   questionInstance = {};
 
-  console.log(questions);
-
   // Reset timer
   resetCountdown();
 
