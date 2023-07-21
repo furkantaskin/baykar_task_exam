@@ -8,6 +8,7 @@ const formWrapper = document.getElementById("wrapper");
 const contentArea = document.getElementById("content-area");
 const timer = document.getElementById("timer");
 const questionTitle = document.getElementById("question-title");
+const guide = document.getElementById("guide");
 const checkInputs = document.querySelectorAll("input[type='checkbox']");
 let questionTimer;
 let countdown = 30;
@@ -132,6 +133,7 @@ function submitAnswers() {
   }
 
   timer.remove();
+  guide.remove();
   contentArea.innerHTML = `
     <table class="w-full text-sm text-center text-gray-500">
         <thead class="text-xs text-gray-700 uppercase bg-gray-50">
@@ -217,6 +219,21 @@ function updateInputs(elem) {
 // Expose function of module to window
 window.updateInputs = updateInputs;
 
+
+function keyboardNavigation(e) {
+  console.log(e.key);
+  let option = e.key.toLowerCase();
+  if ("abcd".includes(option)) {
+    const getInput = document.getElementById(option);
+    if (!getInput.disabled) {
+      getInput.checked = getInput.checked ? false : true;
+      updateInputs(getInput);
+    }
+  }
+  if ((option === " " || e.code === "Space")) {
+    nextQuestion();
+  }
+}
 nextButton.addEventListener("click", () => {
   nextQuestion();
 });
@@ -226,13 +243,4 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 // Navigate options using keyboard
-window.addEventListener("keydown", function (e) {
-  let option = e.key.toLowerCase();
-  if ("abcd".includes(option)) {
-    const getInput = document.getElementById(option);
-    if (!getInput.disabled) {
-      getInput.checked = getInput.checked ? false : true;
-      updateInputs(getInput);
-    }
-  }
-});
+window.addEventListener("keydown", keyboardNavigation(ev));
