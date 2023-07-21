@@ -79,7 +79,7 @@ function initQuestion() {
   const inputElements = document.querySelectorAll("input");
   inputElements.forEach((input) => {
     input.setAttribute("disabled", true);
-    input.labels[0].classList.add("opacity-50");
+    input.labels[0].classList.add("opacity-50", "cursor-not-allowed");
   });
 
   // Start timer
@@ -96,8 +96,10 @@ function initQuestion() {
     // Enable inputs after 10 seconds
     if (countdown <= 20) {
       inputElements.forEach((input) => {
+        let relatedLabel = input.labels[0];
         input.removeAttribute("disabled");
-        input.labels[0].classList.remove("opacity-50");
+        relatedLabel.classList.remove("opacity-50", "cursor-not-allowed");
+        relatedLabel.classList.add("cursor-pointer");
       });
     }
 
